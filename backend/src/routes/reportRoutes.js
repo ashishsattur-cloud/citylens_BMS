@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { addComment, createReport, deleteReport, getReport, listReports, myReports, publicStats, updateReport, updateStatus } from '../controllers/reportController.js';
+import { adminOnly, optionalAuth, protect } from '../middleware/auth.js';
+import { upload } from '../config/uploads.js';
+const router = Router();
+router.get('/stats', publicStats);
+router.get('/', listReports);
+router.post('/', optionalAuth, upload.array('photos', 3), createReport);
+router.get('/mine', protect, myReports);
+router.get('/:id', getReport);
+router.post('/:id/comments', optionalAuth, addComment);
+router.put('/:id', protect, updateReport);
+router.delete('/:id', protect, deleteReport);
+router.patch('/:id/status', protect, adminOnly, updateStatus);
+export default router;
